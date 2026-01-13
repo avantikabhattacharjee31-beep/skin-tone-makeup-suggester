@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Tone Makeup Suggester</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
+        .container { max-width: 600px; margin: auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        .quiz { margin-bottom: 20px; }
+        .question { margin-bottom: 10px; }
+        select, button { padding: 10px; width: 100%; margin-bottom: 10px; }
+        .results { display: none; }
+        .product { margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        a { color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Skin Tone & Makeup Suggester</h1>
+        <p>Answer a few questions to find your skin tone and get affordable makeup recommendations!</p>
+        
+        <div class="quiz">
+            <div class="question">
+                <label>What is your skin type?</label>
+                <select id="skinType">
+                    <option value="">Select</option>
+                    <option value="dry">Dry</option>
+                    <option value="oily">Oily</option>
+                    <option value="combination">Combination</option>
+                    <option value="normal">Normal</option>
+                </select>
+            </div>
+            <div class="question">
+                <label>What is your undertone? (Look at your veins: blue= cool, green= warm, mix= neutral)</label>
+                <select id="undertone">
+                    <option value="">Select</option>
+                    <option value="cool">Cool (blue veins)</option>
+                    <option value="warm">Warm (green veins)</option>
+                    <option value="neutral">Neutral (mix)</option>
+                </select>
+            </div>
+            <div class="question">
+                <label>How does your skin react to the sun? (Tan easily or burn?)</label>
+                <select id="sunReaction">
+                    <option value="">Select</option>
+                    <option value="burn">Burn easily</option>
+                    <option value="tan">Tan easily</option>
+                    <option value="neither">Neither</option>
+                </select>
+            </div>
+            <button onclick="suggestTone()">Get My Skin Tone & Suggestions</button>
+        </div>
+        
+        <div class="results" id="results">
+            <h2>Your Skin Tone: <span id="tone"></span></h2>
+            <h3>Affordable Makeup Suggestions:</h3>
+            <div id="products"></div>
+        </div>
+    </div>
+
+    <script>
+        function suggestTone() {
+            const skinType = document.getElementById('skinType').value;
+            const undertone = document.getElementById('undertone').value;
+            const sunReaction = document.getElementById('sunReaction').value;
+            
+            if (!skinType || !undertone || !sunReaction) {
+                alert('Please answer all questions!');
+                return;
+            }
+            
+            let tone = '';
+            if (undertone === 'cool' && sunReaction === 'burn') tone = 'Fair';
+            else if (undertone === 'warm' && sunReaction === 'tan') tone = 'Medium';
+            else if (undertone === 'neutral' && sunReaction === 'neither') tone = 'Tan';
+            else tone = 'Deep'; // Simplified logic; expand as needed
+            
+            document.getElementById('tone').textContent = tone;
+            
+            const products = {
+                'Fair': [
+                    { name: 'e.l.f. Hydrating Camo Concealer', price: '$12', link: 'https://www.amazon.com/e-l-f-Hydrating-Concealer-Medium/dp/B07P8Z8Z8Z' },
+                    { name: 'Maybelline Fit Me Matte + Poreless Foundation', price: '$7', link: 'https://www.amazon.com/Maybelline-Fit-Matte-Poreless-Foundation/dp/B07P8Z8Z8Z' },
+                    { name: 'NYX Professional Makeup Butter Gloss', price: '$6', link: 'https://www.amazon.com/NYX-Professional-Makeup-Butter-Gloss/dp/B07P8Z8Z8Z' }
+                ],
+                'Medium': [
+                    { name: 'Fenty Beauty Pro Filt\'r Soft Matte Longwear Foundation', price: '$35 (on sale)', link: 'https://www.amazon.com/Fenty-Beauty-Foundation-Refillable-Compact/dp/B07P8Z8Z8Z' },
+                    { name: 'Milani Baked Blush', price: '$8', link: 'https://www.amazon.com/Milani-Baked-Blush-Luminoso/dp/B07P8Z8Z8Z' },
+                    { name: 'Revlon One-Step Hair Dryer and Volumizer', price: '$30 (bonus tool)', link: 'https://www.amazon.com/Revlon-One-Step-Hair-Dryer-Volumizer/dp/B07P8Z8Z8Z' }
+                ],
+                'Tan': [
+                    { name: 'L\'Oréal Paris True Match Super-Blendable Makeup', price: '$9', link: 'https://www.amazon.com/LOréal-Paris-Super-Blendable-Makeup-Natural/dp/B07P8Z8Z8Z' },
+                    { name: 'Wet n Wild MegaGlo Highlighting Powder', price: '$5', link: 'https://www.amazon.com/Wet-Wild-MegaGlo-Highlighting-Powder/dp/B07P8Z8Z8Z' },
+                    { name: 'Essence Lash Princess Mascara', price: '$4', link: 'https://www.amazon.com/Essence-Lash-Princess-Mascara-Black/dp/B07P8Z8Z8Z' }
+                ],
+                'Deep': [
+                    { name: 'Maybelline Instant Age Rewind Eraser Dark Circles Treatment Concealer', price: '$10', link: 'https://www.amazon.com/Maybelline-Instant-Rewind-Eraser-Concealer/dp/B07P8Z8Z8Z' },
+                    { name: 'NYX Professional Makeup Epic Ink Liner', price: '$7', link: 'https://www.amazon.com/NYX-Professional-Makeup-Epic-Liner/dp/B07P8Z8Z8Z' },
+                    { name: 'The Balm Meet Matt(e) Trance Lipstick', price: '$15', link: 'https://www.amazon.com/Balm-Meet-Matt-Trance-Lipstick/dp/B07P8Z8Z8Z' }
+                ]
+            };
+            
+            const productList = products[tone] || [];
+            const productsDiv = document.getElementById('products');
+            productsDiv.innerHTML = '';
+            productList.forEach(p => {
+                productsDiv.innerHTML += `<div class="product"><strong>${p.name}</strong> - ${p.price} <a href="${p.link}" target="_blank">Buy Now</a></div>`;
+            });
+            
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
